@@ -1,13 +1,41 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "3PL Warehouse for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Warehouse week",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Warehouse week",
+        "sql": "select * from dispatch_view order by due_on"
+      }
+    ]
+  },
+  {
+    "name": "attention",
+    "title": "Exceptions to resolve",
+    "sections": [
+      {
+        "title": "Exceptions to resolve",
+        "sql": "select * from attention_view order by issue"
+      }
+    ]
+  },
+  {
+    "name": "capacity",
+    "title": "Pallet capacity",
+    "sections": [
+      {
+        "title": "Pallet capacity",
+        "sql": "select * from capacity_view"
+      }
+    ]
+  },
+  {
+    "name": "storage",
+    "title": "Storage estimate",
+    "sections": [
+      {
+        "title": "Storage estimate",
+        "sql": "select * from storage_view"
       }
     ]
   }

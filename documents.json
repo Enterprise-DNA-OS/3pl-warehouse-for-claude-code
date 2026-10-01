@@ -1,11 +1,52 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "stock-statement",
+    "title": "Customer stock statement",
+    "for_each": "select id,name from customers",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Stock on hand",
+        "sql": "select lot,product,location,batch,quantity,reserved,free,status,expires_on from stock_view where customer_id=$1 order by lot"
+      }
+    ]
+  },
+  {
+    "name": "pick-slip",
+    "title": "Pick slip: supervisor release required",
+    "for_each": "select id,name from orders where status='open'",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Order",
+        "sql": "select order_ref,customer,lot,product,quantity,due_on,destination,release_check from dispatch_view where id=$1"
+      }
+    ]
+  },
+  {
+    "name": "charge-statement",
+    "title": "Warehouse charge statement: check approval status",
+    "for_each": "select id,name from customers",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Weekly charges",
+        "sql": "select r.name,r.week_ending,r.status,r.approved_by,l.currency,l.kind,l.units,l.rate_cents,l.amount_cents from charge_lines l join charge_runs r on r.id=l.run_id where l.customer_id=$1 order by r.week_ending,l.kind",
+        "note": "Internal charge statement, not a tax invoice. Storage is a week-end snapshot; handling covers seven calendar days."
+      }
+    ]
+  },
+  {
+    "name": "incident-record",
+    "title": "Safety event record: operator review",
+    "for_each": "select id,name from incidents",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Recorded evidence",
+        "sql": "select name,occurred_on,notifiable,notified_on,retain_until,note from incidents where id=$1",
+        "note": "This document does not notify a regulator."
+      }
     ]
   }
 ]

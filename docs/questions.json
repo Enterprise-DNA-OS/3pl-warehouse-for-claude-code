@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Which overdue orders compete with soon-expiring stock?",
+    "command": "pick-list"
+  },
+  {
+    "question": "Which clients have quarantined units and late dispatches together?",
+    "command": "customer-review"
+  },
+  {
+    "question": "Which lots have sat here for more than sixty days?",
+    "command": "attention"
+  },
+  {
+    "question": "Where are we reserving stock that now needs a quarantine review?",
+    "command": "stock"
+  },
+  {
+    "question": "Which locations have room for the next receipt?",
+    "command": "capacity"
+  },
+  {
+    "question": "Which customers have no agreed storage or handling rate?",
+    "command": "attention"
+  },
+  {
+    "question": "What does each customer\u2019s current pallet footprint cost at their agreed rate?",
+    "command": "storage-run"
+  },
+  {
+    "question": "Which charge lines came from storage and which from handling?",
+    "command": "charges"
+  },
+  {
+    "question": "Which safety event needs notification or a corrected retention date?",
+    "command": "compliance"
+  },
+  {
+    "question": "Which customers have stock on hand but no recorded operations note?",
+    "command": "customer-review"
+  }
+]

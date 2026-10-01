@@ -1,0 +1,3 @@
+Customer,Id,Active,Name,Code,Type,Base Measurement,Storage Charge Method,Stock Selection Method
+Demo Import Customer,901,Yes,"Olives, green",OLV-12,Ambient,CTN,Per Pallet,FEFO
+Demo Import Customer,902,No,Spare labels,LBL-01,Ambient,EA,Per Item,FIFO

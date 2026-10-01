@@ -1,43 +1,47 @@
-# 3PL Warehouse for Claude Code: operating instructions
+# Warehouse operating instructions
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+Business: fill in your warehouse name. Demo: fictional Kauri Warehouse. Operator: warehouse manager. Priorities: correct client ownership, safe release, traceable movements and agreed charges.
 
-## Who this is for
+Read README.md, docs/replace-cartoncloud.md and docs/compliance.md before real work. Database records are the source of truth. Never invent a quantity, rate, approval, receipt or notification. Read affected records before writing. Resolve ambiguous names with the operator. Never send or notify a regulator. Drafts stay in drafts/. Deletions, destructive migrations and external writes require operator approval. Do not seed real data. Never bypass a stock hold with fabricated evidence.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+One CLI: `npm run warehouse -- help`. Machine reads use `--json`. Add/set take an input JSON file with only the fields in scripts/lib/domain.mjs. Every recurring job uses .claude/commands/<name>.md. Commands are the same in Claude Code, Codex, OpenCode and Cursor. `npm run view` writes dashboards; `npm run docs` writes paperwork; brand.json supplies the business identity.
 
-Fill this in once. A worker with context knows. A worker without it guesses.
-
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Job | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| Customer rates and currency | /customers |
+| Product master | /products |
+| Stock, reservations and free units | /stock |
+| Recent goods received | /inbound-receipts |
+| Due orders and release holds | /pick-list |
+| All warehouse orders | /orders |
+| Occupied and free pallet spaces | /capacity |
+| Lots requiring expiry review | /expiry-watch |
+| Current weekly storage estimate | /storage-run |
+| Stored weekly charge lines | /charges |
+| Overdue dispatch, held stock and missing rates | /attention |
+| Safety record and stock policy checks | /compliance |
+| Safety event register | /incidents |
+| Customer operations notes | /notes |
+| Receipt, dispatch and adjustment audit trail | /movements |
+| Customer stock, overdue work and last contact | /customer-review |
+| One customer record | /customer |
+| Add a customer, product, location or incident | /add |
+| Correct a customer, product, location or incident | /set |
+| Book a goods receipt | /receive |
+| Reserve stock for an outbound order | /allocate |
+| Record supervisor release and deduct stock | /dispatch |
+| Cancel an open order and release its reservation | /cancel |
+| Record a stock count correction | /adjust |
+| Quarantine a lot | /hold |
+| Release a quarantine after review | /release |
+| Freeze this week’s charge draft | /bill-week |
+| Record approval of a checked charge draft | /approve-charges |
+| Record a customer operations note | /log |
+| Draft a customer stock statement | /draft-statement |
+| Import CartonCloud product master | /import |
+| Export every warehouse record | /export |
+| Monday review | /weekly-review |
+| Change a rule or field | /customise |
+| Add a read-only report | /new-view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
-
-## Hard rules
-
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off CartonCloud.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/cartoncloud
+Omni by Enterprise DNA: https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=cartoncloud

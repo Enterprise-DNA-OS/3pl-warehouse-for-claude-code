@@ -1,24 +1,11 @@
-# Why there is no front end
+# Why no front end
 
-CartonCloud is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+The base is a database, a CLI and agent recipes for a small warehouse’s office operations. Read-only HTML views show stock, dispatch, capacity and charge exceptions. Printed pick slips and statements come from the same records.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+A scanner application provides fast repeated scans, mobile access, camera capture and offline work. This base does not. It also does not book carriers, optimise routes, host a customer portal or capture signatures. Enterprise DNA scopes those interfaces and connections around a warehouse’s actual process.
 
-## What you gain
+PGlite is for one local operator. Close one process before opening another. For a team, use a secured Postgres service, individual access controls and tested backups. This CLI uses a trusted operator connection and does not implement tenant isolation or a public API. Customer boundaries are checked in warehouse operations, not an authentication system.
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
+Orders reserve one lot each. Split a multi-lot consignment into separately referenced order lines. Receipts use base units; pallet rounding is per lot. Storage charges are current snapshots, not reconstructed historical averages. Approved charge lines are immutable through the CLI. Corrections need an explicit reviewed accounting adjustment; the program does not issue tax invoices, take payments or post to a ledger.
 
-## What you give up
-
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
-
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep CartonCloud. If you need the answers more than the screens, this is cheaper, faster and yours.
-
-Installed and run for you: https://enterprisedna.co/omni/instead-of/cartoncloud
+Back up before migration and preserve original exports. `export` is a portable record snapshot; use native database backups for restoration and test a restore before relying on it. Never seed a production database.
