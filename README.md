@@ -4,7 +4,7 @@ Stock, dispatch and weekly warehouse charges in a database you own. Built by Ent
 
 | Do it yourself | We customise it | We run it for you |
 |---|---|---|
-| Free, MIT. Install and try the demo. | Your warehouse rules, export mappings and scanner interface. [Book a call](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=cartoncloud). | Installed and operated through **Omni by Enterprise DNA**. One setup fee, then a retainer. [See the offer](https://enterprisedna.co/omni/instead-of/cartoncloud). |
+| Free, MIT. Install and try the demo. | Your warehouse rules, export mappings and scanner interface. [Book a call](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=cartoncloud). | Installed and operated through **Omni by Enterprise DNA**. One setup fee, then a retainer. [See the offer](https://enterprisedna.co/omni/instead-of/cartoncloud?utm_source=github&utm_medium=readme&utm_campaign=cartoncloud). |
 
 ## Start here
 
