@@ -9,7 +9,7 @@ export const reads={
  products:'select p.id,c.name as customer,p.code,p.name,p.active,p.base_unit,p.units_per_pallet from products p join customers c on c.id=p.customer_id order by c.name,p.code',
  stock:'select lot,customer,product,location,batch,quantity,reserved,free,status,expires_on from stock_view order by customer,lot',
  'inbound-receipts':"select s.customer,s.lot,m.quantity,s.base_unit,m.occurred_on,m.note from movements m join stock_view s on s.id=m.lot_id where kind='receipt' order by m.occurred_on desc",
- 'pick-list':"select order_ref,customer,lot,product,quantity,due_on,destination,release_check from dispatch_view where status='open' order by due_on,order_ref",
+ 'pick-list':"select d.order_ref,d.customer,d.lot,d.product,d.quantity,s.base_unit,d.due_on,s.expires_on,d.destination,d.release_check from dispatch_view d join orders o on o.id=d.id join stock_view s on s.id=o.lot_id where d.status='open' order by d.due_on,d.order_ref",
  orders:'select * from dispatch_view order by due_on,order_ref',
  capacity:'select * from capacity_view order by location',
  'expiry-watch':"select customer,lot,quantity,status,expires_on from stock_view where quantity>0 and expires_on<=current_date+30 order by expires_on",
@@ -20,7 +20,7 @@ export const reads={
  incidents:'select name,occurred_on,notifiable,notified_on,retain_until,note from incidents order by occurred_on desc',
  notes:'select c.name as customer,n.recorded_on,n.note from notes n join customers c on c.id=n.customer_id order by n.recorded_on desc',
  movements:'select s.customer,s.lot,m.kind,m.quantity,m.occurred_on,m.note from movements m join stock_view s on s.id=m.lot_id order by m.created_at',
- 'customer-review':`select c.name as customer,c.currency,(select count(*) from orders o where o.customer_id=c.id and status='open' and due_on<current_date) as overdue_orders,(select coalesce(sum(pallets),0) from stock_view s where s.customer_id=c.id) as pallets,(select coalesce(sum(quantity),0) from stock_view s where s.customer_id=c.id and status='quarantine') as held_units,(select max(recorded_on) from notes n where n.customer_id=c.id) as last_note from customers c order by c.name`
+ 'customer-review':`select c.name as customer,c.currency,(select count(*) from orders o where o.customer_id=c.id and status='open' and due_on<current_date) as overdue_orders,(select coalesce(sum(pallets),0) from stock_view s where s.customer_id=c.id) as pallets,(select count(*) from stock_view s where s.customer_id=c.id and status='quarantine' and quantity>0) as held_lots,(select max(recorded_on) from notes n where n.customer_id=c.id) as last_note from customers c order by c.name`
 };
 const flag=(args,k)=>args.find(a=>a.startsWith('--'+k+'='))?.slice(k.length+3);
 function required(v,label){if(v===undefined||v===null||String(v).trim()==='')throw Error('Required: '+label);return v;}

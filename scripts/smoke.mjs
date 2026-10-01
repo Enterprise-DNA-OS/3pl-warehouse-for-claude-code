@@ -8,12 +8,15 @@ import {migrate} from './migrate.mjs';
 import {run,reads,resolve,format} from './warehouse.mjs';
 import {parseCsv} from './lib/csv.mjs';
 const temp=fs.mkdtempSync(path.join(os.tmpdir(),'warehouse-test-'));
+const testUrl=process.env.TEST_DATABASE_URL||'';
+const schema='warehouse_test_'+Date.now();
 process.env.DATABASE_URL='';process.env.DATA_DIR=path.join(temp,'db');process.env.OUTPUT_DIR=temp;
 let db,checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const fail=async(fn,re)=>{await assert.rejects(fn,re);checks++;};
 const file=(n,v)=>{const p=path.join(temp,n);fs.writeFileSync(p,typeof v==='string'?v:JSON.stringify(v));return p;};
 const cli=(s,args=[],status=0)=>{const p=spawnSync(process.execPath,[s,...args],{cwd:REPO_ROOT,env:process.env,encoding:'utf8'});assert.equal(p.status,status,p.stderr||p.stdout);checks++;return p.stdout;};
 try{
+ if(testUrl){process.env.DATABASE_URL=testUrl;const admin=await getDb();try{await admin.exec(`create schema ${schema}`);}finally{await admin.close();}const u=new URL(testUrl);u.searchParams.set('options','-c search_path='+schema);process.env.DATABASE_URL=u.toString();}
  db=await getDb();ok((await migrate(db)).ran.length===1,'fresh migration');ok((await migrate(db)).ran.length===0,'repeat migrate');
  const seed=fs.readFileSync(path.join(REPO_ROOT,'supabase/seed.sql'),'utf8');await db.exec(seed);await db.exec(seed);
  ok((await db.query('select * from lots')).length===3,'seed idempotent');
@@ -77,5 +80,5 @@ try{
  ok(fs.readdirSync(path.join(temp,'docs-out','charge-statement')).length>0,'charge statement rendered');
  ok(fs.readdirSync(path.join(temp,'docs-out','incident-record')).length>0,'incident records rendered');
  const commandCount=fs.readdirSync(path.join(REPO_ROOT,'.claude/commands')).filter(x=>x.endsWith('.md')).length;
- console.log(`PASS: ${checks} checks; ${commandCount} agent commands; temporary database, no credentials.`);
-}finally{await db?.close();fs.rmSync(temp,{recursive:true,force:true});}
+ console.log(`PASS: ${checks} checks; ${commandCount} agent commands; ${testUrl?'isolated Postgres schema':'temporary PGlite database'}.`);
+}finally{await db?.close();if(testUrl){process.env.DATABASE_URL=testUrl;const admin=await getDb();try{await admin.exec(`drop schema if exists ${schema} cascade`);}finally{await admin.close();}}fs.rmSync(temp,{recursive:true,force:true});}
